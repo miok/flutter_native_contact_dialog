@@ -15,7 +15,7 @@ import android.content.*
 import android.os.Build
 
 
-class NativeContactDialogPlugin(private val activity: Activity): MethodCallHandler {
+class NativeContactDialogPlugin(private val activity: Activity?): MethodCallHandler {
   companion object {
     @JvmStatic
     fun registerWith(registrar: Registrar) {
@@ -29,9 +29,9 @@ class NativeContactDialogPlugin(private val activity: Activity): MethodCallHandl
       "addContact" -> {
         val c = Contact.fromMap(call.arguments as HashMap<*, *>)
         if (this.addContact(c)) {
-          result.success(null)
+          result?.success(null)
         } else {
-          result.error(null, "Failed to add the contact", null)
+          //result.error(null, "Failed to add the contact", null)
         }
       }
       else -> result.notImplemented()
@@ -103,7 +103,7 @@ class NativeContactDialogPlugin(private val activity: Activity): MethodCallHandl
 
     return try {
       intent.putExtra(ContactsContract.Intents.Insert.NAME, contact.getDisplayName());
-      activity.startActivity(intent)
+      activity?.startActivity(intent)
       true
     } catch (e: Exception) {
       false
